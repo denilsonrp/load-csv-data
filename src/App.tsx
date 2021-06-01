@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import Dropzone from 'react-dropzone'
+import Papaparse from 'papaparse'
 
 function App() {
+  function parseCSV(files: any) {    
+    Papaparse.parse(files[0], {
+      header: true,
+      complete: (results) => {
+        console.log(results.data)
+      }
+    })    
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Dropzone onDrop={files => parseCSV(files)}>
+      {({getRootProps, getInputProps}) => (
+        <div className="container-input" {...getRootProps()}>
+          <input {...getInputProps()} />
+          <p>Drag 'n' drop some files here, or click to select files</p>
+        </div>
+      )}
+    </Dropzone>
+  )
 }
 
 export default App;
